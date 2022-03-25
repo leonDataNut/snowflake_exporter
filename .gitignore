@@ -102,6 +102,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
+envdir/
 .env
 .venv
 env/
@@ -127,3 +128,5 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+.DS_Store
