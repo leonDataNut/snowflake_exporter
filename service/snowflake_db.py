@@ -35,8 +35,29 @@ class connection:
         log_msg(LOG, f'Query id {cur.sfqid} ran successfully')
 
         return cur
-        
 
+
+    def execute_sql_return_df(self, query, verbose=True):
+        cur = self.con.cursor()
+        log_msg(LOG, f'Executing query:\n {query}', verbose=verbose)
+
+        cur.execute(query)
+        log_msg(LOG, f'Query id {cur.sfqid} ran successfully')
+        df = cur.fetch_pandas_all()
+
+        return df
+
+
+    def execute_sql_return_column_values(self, query, column, verbose=True):
+        df = self.execute_sql_return_df(query, verbose)
+        lowercase_columns = {x:x.lower() for x in df.columns}
+        lowercase_search_column = column.lower()
+        df.rename(columns=lowercase_columns,inplace=True)
+
+        values = df[lowercase_search_column].values.tolist()
+        return values
+
+        
     def yield_query_results(self, query, verbose=True):
         cur = self.execute_sql(query, verbose)
         return cur.fetch_pandas_batches()
