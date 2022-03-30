@@ -51,7 +51,7 @@ def export_tables_to_csv(snowflake_database, snowflake_schema, tables:list, fold
         destination_folder = f"{folder}/{snowflake_database}-{snowflake_schema}-{snowflake_table}"
         export_table_to_csv(snowflake_database, snowflake_schema, snowflake_table, destination_folder, verbose)
 
-
+ 
 def export_schema_tables_to_csv(schemas:list = EXPORT_TABLE_SCHEMAS, folder=DEFAULT_FOLDER, verbose=True):
     for schema in schemas:
         log_msg(LOG, f"Proccessing Tables in schema {schema}..." )
