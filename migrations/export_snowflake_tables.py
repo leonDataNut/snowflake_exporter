@@ -5,7 +5,7 @@ from migrations import EXPORT_TABLE_SCHEMAS, LIST_TABLES_SQL
 
 LOG = setup_logging(__name__)
 FILE_NAME = "{snowflake_table}_{index}.csv"
-DEFAULT_FOLDER = 'Documents'
+DEFAULT_FOLDER = os.environ.get('EXPORT_FOLDER','Documents')
 
 
 def make_directory(folder):
@@ -52,7 +52,7 @@ def export_tables_to_csv(snowflake_database, snowflake_schema, tables:list, fold
         export_table_to_csv(snowflake_database, snowflake_schema, snowflake_table, destination_folder, verbose)
 
 
-def export_schema_tables_to_csv(schemas:list = EXPORT_TABLE_SCHEMAS, verbose=True):
+def export_schema_tables_to_csv(schemas:list = EXPORT_TABLE_SCHEMAS, folder=DEFAULT_FOLDER, verbose=True):
     for schema in schemas:
         log_msg(LOG, f"Proccessing Tables in schema {schema}..." )
         snowflake_database = schema.split('.')[0]
@@ -60,4 +60,4 @@ def export_schema_tables_to_csv(schemas:list = EXPORT_TABLE_SCHEMAS, verbose=Tru
         tables = list_tables_in_schema(snowflake_database, snowflake_schema)
         tables_str = "\n".join([f"{snowflake_database}.{snowflake_schema}.{x}" for x in tables])
         log_msg(LOG, f"Exporting Tables:\n{tables_str}" )
-        export_tables_to_csv(snowflake_database, snowflake_schema, tables, verbose=verbose)
+        export_tables_to_csv(snowflake_database, snowflake_schema, tables, folder, verbose=verbose)
