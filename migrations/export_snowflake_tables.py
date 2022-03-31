@@ -49,7 +49,10 @@ def list_tables_in_schema(snowflake_database, snowflake_schema):
 def export_tables_to_csv(snowflake_database, snowflake_schema, tables:list, folder=DEFAULT_FOLDER, verbose=True):
     for snowflake_table in tables:
         destination_folder = f"{folder}/{snowflake_database}-{snowflake_schema}-{snowflake_table}"
-        export_table_to_csv(snowflake_database, snowflake_schema, snowflake_table, destination_folder, verbose)
+        try:
+            export_table_to_csv(snowflake_database, snowflake_schema, snowflake_table, destination_folder, verbose)
+        except Exception as e:
+            log_msg(LOG,f'Unable to load table {snowflake_table} error below:\n{e}')
 
  
 def export_schema_tables_to_csv(schemas:list = EXPORT_TABLE_SCHEMAS, folder=DEFAULT_FOLDER, verbose=True):
